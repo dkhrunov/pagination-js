@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<title>Document</title>
+</head>
+<body>
+		<div class="content"></div>
+		
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li class="pagePrev page-item disabled">
+					<a class="page-link" href="#" tabindex="-1">Prev</a>
+				</li>
+				<li class="page page-item first-page active"><a class="page-link" href="#">1</a></li>
+				<li class="page page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page page-item"><a class="page-link" href="#">4</a></li>
+				<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>
+				<li class="page page-item last-page"><a class="page-link" href="#"></a></li>
+				<li class="pageNext page-item">
+					<a class="page-link" href="#">Next</a>
+				</li>
+			</ul>
+		</nav>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script>
+		$(function(){
+			weather = [
+				{code: '<i class="wi wi-day-storm-showers"></i>'},
+				{code: '<i class="wi wi-day-storm-showers"></i>'},
+				{code: '<i class="wi wi-day-storm-showers"></i>'},
+				{code: '<i class="wi wi-day-thunderstorm"></i>'},
+				{code: '<i class="wi wi-day-thunderstorm"></i>'},
+				{code: '<i class="wi wi-day-thunderstorm"></i>'},
+				{code: '<i class="wi wi-day-thunderstorm"></i>'},
+				{code: '<i class="wi wi-day-rain-mix"></i>'},
+				{code: '<i class="wi wi-day-rain-mix"></i>'},
+				{code: '<i class="wi wi-day-rain-mix"></i>'},
+				{code: '<i class="wi wi-day-rain"></i>'},
+				{code: '<i class="wi wi-day-rain"></i>'},
+				{code: '<i class="wi wi-day-rain"></i>'},
+				{code: '<i class="wi wi-day-rain"></i>'},
+				{code: '<i class="wi wi-day-showers"></i>'},
+				{code: '<i class="wi wi-day-showers"></i>'},
+				{code: '<i class="wi wi-day-showers"></i>'},
+				{code: '<i class="wi wi-snow"></i>'},
+				{code: '<i class="wi wi-snow"></i>'},
+				{code: '<i class="wi wi-snow"></i>'},
+				{code: '<i class="wi wi-day-rain-mix"></i>'},
+				{code: '<i class="wi wi-day-sleet"></i>'},
+				{code: '<i class="wi wi-day-sleet"></i>'},
+				{code: '<i class="wi wi-day-snow"></i>'},
+				{code: '<i class="wi wi-day-snow"></i>'},
+				{code: '<i class="wi wi-day-snow-wind"></i>'},
+				{code: '<i class="wi wi-smoke"></i>'},
+				{code: '<i class="wi wi-smoke"></i>'},
+				{code: '<i class="wi wi-day-haze"></i>'},
+				{code: '<i class="wi wi-sandstorm"></i>'},
+				{code: '<i class="wi wi-fog"></i>'},
+				{code: '<i class="wi wi-fog"></i>'},
+				{code: '<i class="wi wi-day-sunny"></i>'},
+				{code: '<i class="wi wi-day-sunny-overcast"></i>'},
+				{code: '<i class="wi wi-day-sunny-overcast"></i>'},
+				{code: '<i class="wi wi-day-cloudy"></i>'},
+				{code: '<i class="wi wi-cloudy"></i>'},
+				{code: '<i class="wi wi-rain"></i>'},
+			];
+
+			const PageSize = 2;
+			const TotalItems = weather.length;
+			const Pages = Math.ceil(TotalItems/PageSize);
+			let CurrentPage = 1;
+
+			// const render = (start=0) => { 
+			// 	$(".content").text("");
+			// 	$.each(weather.slice(start), function(key, val) {
+			// 		if (key >= PageSize) return;
+			// 		$(".content").text($(".content").text() + val.code + " ");
+			// 	});
+			// }
+			// render();
+
+			$(".last-page").find(".page-link").text(Pages);
+
+			const checkActiveNavBtn = (reverse='false') => {
+				if (CurrentPage === 1) $(".pagePrev").addClass("disabled");
+				if (CurrentPage !== 1) $(".pagePrev").removeClass("disabled");
+
+				if (CurrentPage === Pages) $(".pageNext").addClass("disabled");
+				if (CurrentPage !== Pages) $(".pageNext").removeClass("disabled");
+			}
+			checkActiveNavBtn();
+
+			const renderPages = (reverse='false') => {
+				// [<] [1] [...] [3] [4] [5!] [6] [7] [...] [19] [>]
+				if (CurrentPage > 4 && CurrentPage < Pages-3) {
+					// Удалять вначале все блоки 
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-first").remove();
+					$(".ellipsis-last").remove();
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".last-page").before('<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".active").removeClass("active");
+					$(".ellipsis-first").after(`<li class="page page-item active"><a class="page-link" href="#">${CurrentPage}</a></li>`);
+
+					for (let i = CurrentPage+1; i < CurrentPage+3; i++) {
+						$(".ellipsis-last").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					for (let i = CurrentPage-1; i > CurrentPage-3; i--) {
+						$(".ellipsis-first").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+				} 
+				// [<] [1] [...] [3] [4] [5!] [6] [7] [...] [19] [>]
+				else if (CurrentPage === Pages-4 && reverse) {
+					// Удалять вначале все блоки 
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-first").remove();
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".last-page").before('<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".active").removeClass("active");
+					$(".ellipsis-first").after(`<li class="page page-item active"><a class="page-link" href="#">${CurrentPage}</a></li>`);
+
+					for (let i = CurrentPage+1; i < CurrentPage+3; i++) {
+						$(".ellipsis-last").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					for (let i = CurrentPage-1; i > CurrentPage-3; i--) {
+						$(".ellipsis-first").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+				}
+				// [<] [1] [2] [3] [4!] [...] [19] [>]
+				else if (CurrentPage === 4 && reverse) {
+					// Удалять вначале все блоки 
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-first").remove()
+					for (let i = CurrentPage; i > 1; i--) {
+						$(".first-page").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$($(".page")[3]).addClass("active");
+				}
+				// [<] [1] [2] [3] [4!] [...] [19] [>]
+				else if (CurrentPage >= 1 && CurrentPage <= 4) {
+					if (reverse) {
+						let active = $("li.active");
+						let prev = ($(active).prev().hasClass("ellipsis")) ? $(active).prev().prev() : $(active).prev();
+						$(active).removeClass("active");
+						$(prev).addClass("active");
+					} else {
+						let active = $("li.active");
+						let next = ($(active).next().hasClass("ellipsis")) ? $(active).next().next() : $(active).next();
+						$(active).removeClass("active");
+						$(next).addClass("active");
+					}
+				}
+				// [<] [1] [...] [16]! [17] [18] [19] [>]
+				else if (CurrentPage === Pages-3) {
+					// Удалять вначале все блоки 
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-last").remove();
+					$(".ellipsis-first").remove()
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					for (let i = CurrentPage; i < CurrentPage+3; i++) {
+						$(".last-page").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$($(".page")[1]).addClass("active");
+				}
+				// [<] [1] [...] [16]! [17] [18] [19] [>]
+				else if (CurrentPage > Pages-3) {
+					if (reverse) {
+						let active = $("li.active");
+						let prev = ($(active).prev().hasClass("ellipsis")) ? $(active).prev().prev() : $(active).prev();
+						$(active).removeClass("active");
+						$(prev).addClass("active");
+					} else {
+						let active = $("li.active");
+						let next = ($(active).next().hasClass("ellipsis")) ? $(active).next().next() : $(active).next();
+						$(active).removeClass("active");
+						$(next).addClass("active");
+					}
+				}
+			}
+
+			$(document).on("click", ".pageNext", function(e) {
+				if ($(this).hasClass("disabled")) return e.preventDefault();
+				
+				CurrentPage++;
+				checkActiveNavBtn();
+				renderPages(false);
+
+				e.preventDefault();
+			});
+			
+
+			$(document).on("click", ".pagePrev", function(e) {
+				if ($(this).hasClass("disabled")) return e.preventDefault();
+
+				CurrentPage--;
+				checkActiveNavBtn();
+				renderPages(true);
+
+				e.preventDefault();
+			});
+
+			$(document).on("click", ".page", function(e) {
+				if ($(this).hasClass("disabled")) return e.preventDefault();
+
+				$(".active").removeClass("active");
+				CurrentPage = Number($(this).text());
+
+				// на первую страницу
+				if (CurrentPage === 1) {
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-last").remove();
+					$(".ellipsis-first").remove();
+					$(".last-page").before('<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>');
+					for (let i = CurrentPage+3; i > 1; i--) {
+						$(".first-page").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$(".firts-page").addClass("active");
+				} 
+				// на последнюю страницу
+				else if (CurrentPage === Pages) {
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-last").remove();
+					$(".ellipsis-first").remove();
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					for (let i = CurrentPage-3; i < CurrentPage; i++) {
+						$(".last-page").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$(".last-page").addClass("active");
+				}
+				else if (CurrentPage === 3) {
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-last").remove();
+					$(".ellipsis-first").remove();
+					$(".last-page").before('<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>');
+					// $(".ellipsis-last").before(`<li class="page page-item"><a class="page-link" href="#">${CurrentPage+1}</a></li>`);
+					for (let i = CurrentPage+1; i > CurrentPage-2; i--) {
+						$(".first-page").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$($(".page")[2]).addClass("active");
+				}
+				else if (CurrentPage === Pages-2) {
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-last").remove();
+					$(".ellipsis-first").remove();
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".ellipsis-first").after(`<li class="page page-item"><a class="page-link" href="#">${Pages-3}</a></li>`);
+					for (let i = Pages-2; i < Pages; i++) {
+						$(".last-page").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					$($(".page")[2]).addClass("active");
+				}
+				else if (CurrentPage > 4 && CurrentPage < Pages-3) {
+					// Удалять вначале все блоки 
+					$.each($(".page"), function(i, elem) {
+						if ( !($(elem).hasClass("first-page") || $(elem).hasClass("last-page")) ) {
+							$(elem).remove();
+						}
+					});
+
+					$(".ellipsis-first").remove();
+					$(".ellipsis-last").remove();
+					$(".first-page").after('<li class="ellipsis ellipsis-first page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".last-page").before('<li class="ellipsis ellipsis-last page-item disabled"><a class="page-link" href="#">...</a></li>');
+					$(".active").removeClass("active");
+					$(".ellipsis-first").after(`<li class="page page-item active"><a class="page-link" href="#">${CurrentPage}</a></li>`);
+
+					for (let i = CurrentPage+1; i < CurrentPage+3; i++) {
+						$(".ellipsis-last").before(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+					for (let i = CurrentPage-1; i > CurrentPage-3; i--) {
+						$(".ellipsis-first").after(`<li class="page page-item"><a class="page-link" href="#">${i}</a></li>`);
+					}
+				} 
+				else {
+					checkActiveNavBtn();
+					renderPages();
+				}
+				$(this).addClass("active");
+				checkActiveNavBtn();
+
+				e.preventDefault();
+			});
+		})
+	</script>
+</body>
+</html>
