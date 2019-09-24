@@ -14,3 +14,6 @@ You can use this if there are more than 9 pages!
 
 ### 4:
 ![Fourth state](https://github.com/therealpanda98/Pagination-JS/blob/master/Screenshots/4.PNG)
+
+### 5:
+![Fourth state](https://github.com/therealpanda98/Pagination-JS/blob/master/Screenshots/5.PNG)
