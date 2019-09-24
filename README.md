@@ -2,6 +2,9 @@
 Simple and powerfull pagination.
 You can use this if there are more than 9 pages!
 
+## Required:
+Bootstrap and Jquery (in this example already exists CDN to jquery and bootstrap)
+
 ## Screenshot some state of pagination:
 ### First page, button previous is unactive:
 ![First state](https://github.com/therealpanda98/Pagination-JS/blob/master/Screenshots/1.PNG)
