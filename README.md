@@ -3,14 +3,14 @@ Simple and powerfull pagination.
 You can use this if there are more than 9 pages!
 
 ## Screenshot some state of pagination:
-![Main window](https://github.com/therealpanda98/Exchange-rate/blob/master/Screenshots/screenshot_main_programm.PNG)
+### 1:
+![First state](https://github.com/therealpanda98/Pagination-JS/tree/master/Screenshots/1.PNG)
 
-## This programm have three main functionality:
-### The first block is the choice of currency and date for which you need to know the course:
-![Main window](https://github.com/therealpanda98/Exchange-rate/blob/master/Screenshots/1_block.PNG)
+### 2:
+![Second state](https://github.com/therealpanda98/Pagination-JS/tree/master/Screenshots/2.PNG)
 
-### The second block displays the rate chart for the selected time period (currency selected in the first block):
-![Main window](https://github.com/therealpanda98/Exchange-rate/blob/master/Screenshots/2_block.png)
+### 3:
+![Third state](https://github.com/therealpanda98/Pagination-JS/tree/master/Screenshots/3.PNG)
 
-### The third block shows today the dollar and the euro against the ruble:
-![Main window](https://github.com/therealpanda98/Exchange-rate/blob/master/Screenshots/3_block.PNG)
+### 4:
+![Fourth state](https://github.com/therealpanda98/Pagination-JS/tree/master/Screenshots/4.PNG)
